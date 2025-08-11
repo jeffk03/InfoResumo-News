@@ -38,9 +38,8 @@ Fonte: Nome do veículo de comunicação.
 Link: Botão "Abrir" que direciona para a notícia completa.
 
 Exemplo de Pesquisa: "arroz"
-A imagem a seguir mostra o resultado de uma pesquisa sobre arroz.
-![](fig/news_arroz.png)
 
-Exemplo de Pesquisa: "milho"
-Esta imagem ilustra o resultado da pesquisa sobre soja.
-![](fig/news_soja.png)
+![Esta imagem ilustra o resultado da pesquisa sobre arroz](fig/news_arroz.png)
+
+Exemplo de Pesquisa: "soja"
+![Esta imagem ilustra o resultado da pesquisa sobre soja](fig/news_soja.png)
