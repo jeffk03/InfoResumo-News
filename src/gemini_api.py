@@ -9,10 +9,15 @@ class QuestGemini:
             key_api: Chave api do gemini
             theme (str): O assunto de interesse (ex: 'soja', 'milho', 'Corinthians').
         '''
+        self.MODEL = "gemini-1.5-flash"
         self.client = genai.Client(api_key= key_api)
         self.theme = theme
-        self.prompt_theme = f"Crie uma lista de palavras-chave relacionadas a '{self.theme}', adequada para pesquisa no Google Notícias. A lista deve ser uma única string separada por vírgulas, sem frases adicionais."
-
+        self.prompt_theme = (
+            f"Crie uma lista de palavras-chave relacionadas a '{self.theme}', "
+            "adequada para pesquisa no Google Notícias. A lista deve ser uma única string "
+            "separada por vírgulas, sem frases adicionais."
+        )
+    
 
     def generate_keywords(self):
         """
@@ -20,17 +25,20 @@ class QuestGemini:
         Returns:
             list: Uma lista de strings com as palavras-chave sugeridas.
         """
-        response = self.client.models.generate_content(
-                    model='gemini-1.5-flash',
-                    contents= self.prompt_theme,
-                    )
-        keywords_string = response.text
+        try:
+            response = self.client.models.generate_content(
+                        model= self.MODEL,
+                        contents= self.prompt_theme,
+                        )
+            keywords_string = response.text
 
-        # Processamento da resposta para criar a lista
-        keywords_list = [keyword.strip() for keyword in keywords_string.split(',')]
+            # Processamento da resposta para criar a lista
+            keywords_list = [keyword.strip() for keyword in keywords_string.split(',')]
 
-        return keywords_list
-    
+            return keywords_list
+        except Exception as e:
+            raise RuntimeError(f"Erro ao gerar palavras-chave: {e}")
+        
     def news_summary(self,news_text):
             '''
             A IA vai resumir as noticias dos assuntos de interrese
@@ -40,9 +48,13 @@ class QuestGemini:
                 Uma str que é o resumo da notícia do argumento, com no máximo 3 frases.
 
             '''
-            prompt = f"Por favor, resuma a seguinte notícia em no máximo 3 frases, focando nos pontos mais importantes. \n\nNotícia: {news_text}"
+            prompt = (
+                "Por favor, resuma a seguinte notícia em no máximo 3 frases, "
+                "focando nos pontos mais importantes.\n\n"
+                f"Notícia: {news_text.strip()}")
+            
             response = self.client.models.generate_content(
-                    model='gemini-1.5-flash',
+                    model= self.MODEL,
                     contents= prompt,
                     )
             return response.text
